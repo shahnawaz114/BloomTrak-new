@@ -1,0 +1,562 @@
+<div class="card">
+    <div class="d-flex row justify-content-between">
+        <div class="card-header d-flex flex-column align-items-start pb-0">
+            <p class="font-weight-bolder ml-1">Shift List </p>
+        </div>
+        <div class="card-header pb-0 mr-1" *ngIf="rows?.length ">
+            <span class="badge badge-primary" *ngIf=" currentUser.role != 'Admin'"><a
+                    [routerLink]="['/shift/view-card']">View In Card</a> </span>
+        </div>
+    </div>
+    <div>
+
+    </div>
+    <div class="card-body mt-1">
+        <div class="row mb-2">
+            <div class="col-md-6 col-12">
+                <div class="d-flex">
+                    <!-- <button type="button" class="btn btn-info btn-sm mr-1" [routerLink]="['/shift/shift-posting']">
+                        <i class="fa fa-trash" class="mr-50"></i> Add Posting
+                    </button> -->
+
+                    <button type="button"
+                        *ngIf=" currentUser.role != 'User' &&  currentUser.role != 'Agency'"
+                        class="btn-sm btn-info " [routerLink]="['/shift/shift-confirmation']">
+                        <i class="fa fa-plus "></i> Add Shift
+                    </button>
+                    <button type="button" *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'"
+                        class=" btn-info  btn-sm ml-1" [routerLink]="['/shift/shared-calender']">
+                        <i class="fa fa-calendar  "></i> View Calander
+                    </button>
+                    <button type="button" (click)="filterShift()"
+                        *ngIf="currentUser.role != 'Community' && currentUser.role != 'SuperAdmin'"
+                        class=" btn-info  btn-sm" style="margin-left: 14px; margin-right: 14px;">
+                        <i class="fa fa-eye "></i> Available Shifts
+                    </button>
+                    <button type="button" (click)="filterShift1()"
+                        *ngIf="currentUser.role != 'Community'&& currentUser.role != 'SuperAdmin'"
+                        class=" btn-info  btn-sm">
+                        <i class="fa fa-user"></i> My Shifts
+                    </button>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12 d-flex justify-content-md-end mb-1">
+
+                <div class="col-md-6 col-12 d-flex justify-content-md-end" [class.hidden]="currentUser.role == 'Admin' || currentUser.role == 'SuperAdmin'">
+                    <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                        <label class="d-flex align-items-center"> {{ 'DEPOSIT.depoSearch' | translate}}
+                            <input #searchStrInput type="text" placeholder="Search" class="form-control ml-25"
+                                [(ngModel)]="searchStr" />
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="input-group d-flex" *ngIf="!shiftTypeDrpHide">
+                    <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="shiftType">
+                        <option value="" selected disabled>---Select Shift Type---</option>
+                        <option value="1">Posting</option>
+                        <option value="2">Confirmation</option>
+                        <option value="3">Standard</option>
+                        <option value="4">Urgent</option>
+                        <option value="5">Assigned to cp</option>
+                        <option value="6">Assigned to agency</option>
+                    </select>
+                   
+                    <div>
+
+                        <label class="input-group-text" (click)="getCommunityShifts()">
+                            <i class="fa fa-search"></i></label>
+                    </div>
+                </div>
+
+                <div class="input-group d-flex " *ngIf="shiftTypeDrpHide" >
+                    <select class="custom-select" id="inputGroupSelect02" [(ngModel)]="slctCpType">
+                        <option value="undefined" selected disabled>---Select CP---</option>
+                        <option value="0">Pending</option>
+                        <option value="1">Assigned</option>
+                        <option value="2">Completed</option>
+                        <option value="3">Not Assigned</option>
+                      </select>
+                      <div>
+
+                        <label class="input-group-text" (click)="getCommunityShiftByID()" *ngIf="currentUser.role == 'User' || currentUser.role == 'Agency'"><i class="fa fa-search"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="rows" [columnMode]="'force'"
+            [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+            [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)"
+            *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User' ">
+
+            <ngx-datatable-column name="Community name" prop="community_name" [width]="85"
+            *ngIf="currentUser.role == 'Community' || currentUser.role == 'Admin'">
+            <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{title}}
+            </ng-template>
+        </ngx-datatable-column>
+        
+            <ngx-datatable-column name="Position" prop="positions" [width]="50">
+                <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{title}}
+                </ng-template>
+            </ngx-datatable-column>
+          
+
+            <ngx-datatable-column name="Description" prop="description" [width]="70">
+                <ng-template let-description="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ description }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="delay" prop="delay" [width]="50">
+                <ng-template let-delay="value" let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ delay }} {{row.h_m}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Start date" prop="start_time" [width]="50">
+                <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ start_time | customDateTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Start Time" prop="start_time" [width]="50">
+                <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ start_time | customTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="End date" prop="end_time" [width]="50">
+                <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ end_time | customDateTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="End Time" prop="end_time" [width]="50">
+                <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ end_time | customTime }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="50">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                        <div ngbDropdown container="body">
+                            <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                            </a>
+                            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                                <!-- <a [routerLink]="['/projectProfile', row.id]" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-eye" class="mr-50"></i> View
+                                </a> -->
+                                <a (click)="openDeleteShift(row)" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-trash mr-50" ></i> Archive
+                                </a>
+                                <a [routerLink]="['/shift/edit-shift', row]" ngbDropdownItem class="d-flex align-items-center" *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+                                    <i class="fa fa-edit mr-50"></i> Edit
+                                </a>
+                                <a (click)="applyShift(row)" ngbDropdownItem class="d-flex align-items-center"
+                                    *ngIf="currentUser.role == 'User'">
+                                    <i class="fa fa-check mr-50"></i> Apply
+                                </a>
+                                <!-- <a (click)="assign(row)" ngbDropdownItem class="d-flex align-items-center" *ngIf="currentUser.role != 'User' &&  currentUser.role != 'SuperAdmin'">
+                                    <i class="fa fa-check mr-50"></i> Assign
+                                </a> -->
+                                <a (click)="applied(row)" ngbDropdownItem class="d-flex align-items-center"
+                                    *ngIf="currentUser.role != 'User'&& currentUser.role != 'SuperAdmin'">
+                                    <i class="fa fa-list mr-50"></i> Applied List
+                                </a>
+                                <!-- <a (click)="openClockIn()" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-bell mr-50"></i> Clock In
+                                </a> -->
+                               
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+
+        <span *ngIf="hideTbl">
+        <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000"  [rows]="rows" [columnMode]="'force'"
+            [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="false"
+            [count]="rows.length" [offset]="page.pageNumber" [limit]="10" 
+            *ngIf="currentUser.role == 'Agency' || currentUser.role == 'User' ">
+            <ngx-datatable-column name="Community Name" prop="community_name" [width]="50">
+                <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{title}}
+                </ng-template>
+            </ngx-datatable-column>
+            
+            <ngx-datatable-column name="Position" prop="positions" [width]="50">
+                <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{title}}
+                </ng-template>
+            </ngx-datatable-column>
+           
+            <!-- <ngx-datatable-column name="Address" prop="email" [width]="50">
+                <ng-template let-email="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ id }}
+                </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column name="Description" prop="description" [width]="50"
+                *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+                <ng-template let-description="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ description }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="delay" prop="delay" [width]="50"
+                *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+                <ng-template let-delay="value" let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ delay }} {{row.h_m}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Start date" prop="start_time" [width]="50">
+                <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ start_time | customDateTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Start Time" prop="start_time" [width]="50">
+                <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ start_time | customTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="End date" prop="end_time" [width]="50">
+                <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ end_time | customDateTime}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="End Time" prop="end_time" [width]="50">
+                <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ end_time | customTime }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="50">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                        <div ngbDropdown container="body">
+                            <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                            </a>
+                            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                                <!-- <a [routerLink]="['/projectProfile', row.id]" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-eye" class="mr-50"></i> View
+                                </a> -->
+
+                                <a (click)="openDeleteShift(row)" ngbDropdownItem class="d-flex align-items-center" *ngIf="currentUser.role != 'User'">
+                                    <i class="fa fa-trash mr-50" ></i> Archive
+                                </a>
+                                <a [routerLink]="['/shift/edit-shift', row]" ngbDropdownItem class="d-flex align-items-center" *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+                                    <i class="fa fa-edit mr-50"></i> Edit
+                                </a>
+                                <a (click)="applyShift(row)" ngbDropdownItem class="d-flex align-items-center" >
+                                    <i class="fa fa-check mr-50"></i> Apply
+                                </a>
+                                <a (click)="assign(row)" ngbDropdownItem class="d-flex align-items-center" >
+                                    <i class="fa fa-check mr-50"></i> Assign
+                                </a>
+                                <!-- <a (click)="openClockIn()" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-bell mr-50"></i> Clock In
+                                </a> -->
+                                <!-- <a (click)="strtshft(row)" ngbDropdownItem class="d-flex align-items-center" >
+                                    <i class="fa fa-bell mr-50"></i> Start Shift
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+       </span>
+
+       <span *ngIf="!hideTbl">
+        <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="rows1" [columnMode]="'force'"
+        [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="false"
+        [count]="rows.length" [offset]="page.pageNumber" [limit]="10" 
+        *ngIf="currentUser.role == 'Agency' || currentUser.role == 'User' ">
+        <ngx-datatable-column name="Community Name" prop="community_name" [width]="50">
+            <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{title}}
+            </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Position" prop="positions" [width]="50">
+            <ng-template let-title="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{title}}
+            </ng-template>
+        </ngx-datatable-column>
+       
+        <!-- <ngx-datatable-column name="Address" prop="email" [width]="50">
+            <ng-template let-email="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ id }}
+            </ng-template>
+        </ngx-datatable-column> -->
+        <ngx-datatable-column name="Description" prop="description" [width]="50"
+            *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+            <ng-template let-description="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ description }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="delay" prop="delay" [width]="50"
+            *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+            <ng-template let-delay="value" let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ delay }} {{row.h_m}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Start date" prop="start_time" [width]="50">
+            <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ start_time | customDateTime}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Start Time" prop="start_time" [width]="50">
+            <ng-template let-start_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ start_time | customTime}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="End date" prop="end_time" [width]="50">
+            <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ end_time | customDateTime}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="End date" prop="end_time" [width]="50">
+            <ng-template let-end_time="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ end_time | customTime}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" prop="approval" [width]="50">
+            <ng-template let-approval="value" let-expanded="expanded" ngx-datatable-cell-template>
+                {{ approval }}
+            </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="50">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                    <div ngbDropdown container="body">
+                        <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                        </a>
+                        <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                            <!-- <a [routerLink]="['/projectProfile', row.id]" ngbDropdownItem class="d-flex align-items-center">
+                                <i class="fa fa-eye" class="mr-50"></i> View
+                            </a> -->
+
+                            <!-- <a (click)="openDeleteShift(row)" ngbDropdownItem class="d-flex align-items-center">
+                                <i class="fa fa-trash mr-50"></i> Archive
+                            </a> -->
+                            <a [routerLink]="['/shift/edit-shift', row]" ngbDropdownItem class="d-flex align-items-center" *ngIf="currentUser.role != 'Agency' && currentUser.role != 'User'">
+                                <i class="fa fa-edit mr-50"></i> Edit
+                            </a>
+                            <!-- <a (click)="applyShift(row)" ngbDropdownItem class="d-flex align-items-center" >
+                                <i class="fa fa-check mr-50"></i> Apply
+                            </a> -->
+                            <!-- <a (click)="openClockIn()" ngbDropdownItem class="d-flex align-items-center">
+                                <i class="fa fa-bell mr-50"></i> Clock In
+                            </a> -->
+                            <a (click)="strtshft(row)" ngbDropdownItem class="d-flex align-items-center" *ngIf="row.approvedHide">
+                                <i class="fa fa-play mr-50"></i> Start Shift
+                            </a>
+                            <a href="javascript:void(0)"  ngbDropdownItem class="d-flex align-items-center" *ngIf="!row.approvedHide">
+                                <i class="fa fa-spinner mr-50"></i> Pending...
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+      </span>
+    </div>
+</div>
+
+<!-- DeleteModal -->
+<ng-template #deleteShift let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel1">Archive Shift</h4>
+        <button type="button" [disabled]="deletingUser" class="close" (click)="closed(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <h5>Are you sure you want to Archive this shift ?</h5>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="btnShow" class="btn btn-danger d-flex float-right"
+            style="margin-top: 10px!important;" (click)="deleteshift(modal)" rippleEffect>
+            <span *ngIf="btnShow" class="spinner-border spinner-border-sm mr-1"></span> Archive
+        </button>
+    </div>
+</ng-template>
+<!-- / Modal -->
+
+<!-- Applied list -->
+<ng-template #appliedList let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel">Applied List</h4>
+        <button type="button" [disabled]="delUser" class="close" (click)="closeded(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div>
+            <div class="row ">
+                <div class="col-2 d-flex justify-content-center">
+                    <b>
+                        Position
+                    </b>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <b>
+                        Start Date
+                    </b>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <b>
+                        Start Time
+                    </b>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <b>
+                        End Date
+                    </b>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <b>
+                        End Time
+                    </b>
+                </div>
+            </div>
+
+            <div class="row mt-2" *ngFor="let snglUsr of singleShiftdtail">
+                <div class="col-2 d-flex justify-content-center">
+                    <p>
+                        {{snglUsr.positions}}
+                    </p>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <p>
+                        {{snglUsr.start_time | customDateTime }}
+                    </p>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <p>
+                        {{snglUsr.start_time | customTime }}
+                    </p>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <p>
+                        {{snglUsr.end_time | customDateTime}}
+                    </p>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                    <p>
+                        {{snglUsr.end_time | customTime}}
+                    </p>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="btn-primary">User Name</th>
+                            <!-- <th scope="col" class="btn-primary">Community/Agency</th> -->
+                            <th scope="col" class="btn-primary"> Phone No.</th>
+                            <th scope="col" class="btn-primary"> Email</th>
+                            <!-- <th scope="col" class="btn-primary">User DOB</th> -->
+                            <th scope="col" class="btn-primary">Hourly Rate</th>
+                            <th scope="col" class="btn-primary">Assign</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let snglUsr of appliedUserdtail">
+                            <th scope="row">{{snglUsr.first_name}} ({{snglUsr?.user_id ? 'Community' : 'Agency'}})</th>
+                            <!-- <th scope="row">{{snglUsr.community_name}}</th> -->
+                            <td>{{snglUsr.phone_number}}</td>
+                            <td>{{snglUsr.email}}</td>
+                            <!-- <td>{{snglUsr.DOB}}</td> -->
+                            <td>{{snglUsr.hourly_rate}}</td>
+                            <td><button class="btn btn-primary" (click)="assignShift(snglUsr,modal)"
+                                    *ngIf="snglUsr.approved != 1">Assign</button>
+                                <b
+                                    [innerHTML]="snglUsr.approved == 0 ? 'Pending' : snglUsr.approved == 1 ?  'Assigned' : 'Cancled'"></b>
+                                <!-- [innerHTML]="currentUser.role == 'Agency' ? 'Agency Personnel Info' : 'User Info'" -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr *ngIf="!appliedUserdtail?.length">
+                            <td class="text-center">
+                                <p>No data to display</p>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Clock In Modal -->
+<ng-template #clockInModal let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel1">Clock In</h4>
+        <button type="button" class="close" (click)="closed(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus> 
+        <div class="mt-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="question" style="color: #000;font-family: auto;font-size: initial;font-weight: bold;">
+                        {{questions[currentQuestions].question}}</label> <!--Binding of question (question array -> .index of array -> question)-->
+                </div>
+                <div class="col-md-8 form-group">
+                    <input type="text" placeholder="Answer" class="form-control" name="answer" [(ngModel)]="questions[currentQuestions].answer" (keyUp.enter)="nextQuestion()"> <!--Taking input and saving the data into answer object in question array through currentQuestion index-->
+                </div>
+                <div *ngIf="questions[currentQuestions].error" style="position: absolute;top: 79%;left: 36%;"> <!----validations -->
+                    <span style="color: red; float: right;">Answer required.</span> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!-- <div class="d-flex"> -->
+            <div>
+                <button type="button" *ngIf="currentQuestions > 0" [disabled]="btnShow" class="btn btn-danger d-flex float-right"
+                    style="margin-top: 10px!important;" (click)="previousQuestion()" rippleEffect>
+                    <span *ngIf="btnShow"  class="spinner-border spinner-border-sm mr-1"></span>
+                    <i class="fa fa-arrow-left mr-50" aria-hidden="true"></i>
+                    Previous
+                </button>
+            </div>
+            <div>
+                <button type="button" [disabled]="btnShow" class="btn btn-danger d-flex float-right"
+                    style="margin-top: 10px!important;" (click)="nextQuestion(modal)" rippleEffect>
+                    <span *ngIf="btnShow"  class="spinner-border spinner-border-sm mr-1"></span>
+                    <i class="fa fa-arrow-right mr-50"></i>
+                    {{(currentQuestions+1) < questions?.length ? 'Next' : 'Submit'}}
+                </button>
+            </div>
+        <!-- </div> -->
+    </div>
+</ng-template>
+<!-- / Modal -->

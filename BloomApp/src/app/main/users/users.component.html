@@ -1,0 +1,124 @@
+<div class="card">
+    <div class="card-header d-flex flex-column align-items-start pb-0">
+        <h2 class="font-weight-bolder mt-1">Community List </h2>
+    </div>
+    <div class="card-body mt-1">
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="d-flex justify-content-between align-items-center m-1">
+                    <button type="button" class="btn-sm btn-info" *ngIf="currentUserDtls != 'Admin'" [routerLink]="['/community/add-community']"  >
+                        <i class="fa fa-plus mr-50"></i> Add Community
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-md-end">
+                <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                    <label class="d-flex align-items-center"> {{ 'DEPOSIT.depoSearch' | translate}}
+                        <input #searchStrInput type="text" placeholder="Search" class="form-control ml-25"
+                            [(ngModel)]="searchStr" />
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="rows" [columnMode]="'force'"
+            [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+            [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)">
+            <ngx-datatable-column name="Community name" prop="community_name" [width]="130">
+                <ng-template let-community_name="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_name }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Address 1" prop="community_address1" [width]="80">
+                <ng-template let-community_address="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_address }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Address 2" prop="community_address2" [width]="80">
+                <ng-template let-community_address="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_address }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="City" prop="city" [width]="50">
+                <ng-template let-community_address="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_address }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="State" prop="state" [width]="50">
+                <ng-template let-community_address="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_address }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Zip" prop="zipcode" [width]="50">
+                <ng-template let-community_address="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_address }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Phone No." prop="community_phone_no" [width]="80">
+                <ng-template let-community_phone_no="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_phone_no | numberFormat}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Single/Management" prop="names" [width]="150">
+                <ng-template let-names="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    <span *ngFor="let com of names; let l = last">{{com.mg_name}}{{l ? '' : ','}} </span>
+                    <span *ngIf="!names || !names.length">Single</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="80">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                        <div ngbDropdown container="body">
+                            <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowsername"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                            </a>
+                            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                                <a [routerLink]="['/community/edit-community', row]" ngbDropdownItem
+                                    class="d-flex align-items-center">
+                                    <i class="fa fa-eye mr-50"></i> View
+                                </a>
+                                <a [routerLink]="['/profile', row.id]" ngbDropdownItem
+                                    class="d-flex align-items-center">
+                                    <i class="fa fa-edit mr-50"></i> Edit
+                                </a>
+                                <a (click)="openDeleteUser(row)" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-trash mr-50"></i> Archive
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
+
+<!-- Modal -->
+<ng-template #deleteUser let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel1">Archive Community</h4>
+        <button type="button" [disabled]="deletingUser" class="close" (click)="closed(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <h5>Are you sure you want to Archive this Community ?</h5>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="deletingUser" class="btn btn-danger d-flex float-right"
+            style="margin-top: 10px!important;" (click)="deletesUser(modal)" rippleEffect>
+            <span *ngIf="deletingUser" class="spinner-border spinner-border-sm mr-1"></span> Archive
+        </button>
+    </div>
+</ng-template>
+<!-- / Modal -->
+

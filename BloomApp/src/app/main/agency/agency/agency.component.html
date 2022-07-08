@@ -1,0 +1,782 @@
+<div class="card">
+    <div class="card-header d-flex flex-column align-items-start pb-0">
+        <h2 class="font-weight-bolder mt-1">Agency List </h2>
+    </div>
+    <div class="card-body mt-1">
+        <div class="row">
+            <div class="col-md-6 col-12"  >
+                <div class="d-flex justify-content-between align-items-center m-1">
+
+                        <button type="button" class="btn-sm btn-info" *ngIf="currentUser.role == 'SuperAdmin' || currentUser.role == 'Community' || currentUser.role == 'Admin'" [routerLink]="['/agency/add-agency']"  >
+                            <i class="fa fa-plus "></i> Add Agency
+                        </button>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-md-end">
+                <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                    <label class="d-flex align-items-center"> {{ 'DEPOSIT.depoSearch' | translate}}
+                        <input #searchStrInput type="text" placeholder="Search" class="form-control ml-25"
+                            [(ngModel)]="searchStr" />
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="rows" [columnMode]="'force'"
+            [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+            [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)"> -->
+        <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="rows" [columnMode]="'force'"
+            [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+            [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)">
+
+            <ngx-datatable-column name="Name" prop="agency_name" [width]="100">
+                <ng-template let-agency_name="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ agency_name }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Email" prop="agency_email" [width]="100">
+                <ng-template let-agency_email="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ agency_email }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Phone No." prop="agency_phone" [width]="80">
+                <ng-template let-agency_phone="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ agency_phone |numberFormat}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <!-- <ngx-datatable-column name="Community" prop="community_name" [width]="50">
+                <ng-template let-community_name="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ community_name }}
+                </ng-template>
+            </ngx-datatable-column> -->
+
+            <!-- <ngx-datatable-column name="Address 1" prop="address1" [width]="100">
+                <ng-template let-address1="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ address1 }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Address 2" prop="address2" [width]="100">
+                <ng-template let-address2="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ address2 }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="City" prop="city" [width]="100">
+                <ng-template let-city="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ city }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="State" prop="state" [width]="100">
+                <ng-template let-state="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ state }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Zipcode" prop="zipcode" [width]="100">
+                <ng-template let-zipcode="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ zipcode }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Contact Person Name" prop="primary_contact_person" [width]="100">
+                <ng-template let-primary_contact_person="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ primary_contact_person }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Contact Person Phone" prop="primary_contact_phone" [width]="100">
+                <ng-template let-primary_contact_phone="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ primary_contact_phone |numberFormat }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Contact Person Email" prop="primary_contact_email" [width]="100">
+                <ng-template let-primary_contact_email="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ primary_contact_email }}
+                </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column name="Website" prop="agency_website" [width]="100">
+                <ng-template let-agency_website="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ agency_website }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Status" prop="approval" [width]="50">
+                <ng-template let-approval="value" let-expanded="expanded" ngx-datatable-cell-template>
+                    {{ approval }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="50">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                        <div ngbDropdown container="body">
+                            <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                            </a>
+                            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                                <a [routerLink]="['/agencyProfile', row.id]" ngbDropdownItem
+                                    class="d-flex align-items-center">
+                                    <i class="fa fa-eye mr-50"></i> View
+                                </a>
+                                <a [routerLink]="['/agency/edit-agency', row]" ngbDropdownItem
+                                    class="d-flex align-items-center">
+                                    <i class="fa fa-edit mr-50"></i> Edit
+                                </a>
+                                <a (click)="openDeleteUser(row)" ngbDropdownItem class="d-flex align-items-center">
+                                    <i class="fa fa-ban mr-50"></i> Reject
+                                </a>
+                                <a (click)="giveApproval(row)" ngbDropdownItem class="d-flex align-items-center" *ngIf="row.approvedHide">
+                                    <i class="fa fa-check mr-50"></i> Approval
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<ng-template #deleteActivity let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel1">Reject Agency</h4>
+        <button type="button" [disabled]="deletingUser" class="close" (click)="closed(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <h5>Are you sure you want to Reject this Agency ?</h5>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="deletingUser" class="btn btn-danger d-flex float-right"
+            style="margin-top: 10px!important;" (click)="deletesUser(modal)" rippleEffect>
+            <span *ngIf="deletingUser" class="spinner-border spinner-border-sm mr-1"></span> Reject
+        </button>
+    </div>
+</ng-template>
+<!-- / Modal -->
+
+
+<!-- Add Agency -->
+
+<ng-template #addUsers let-modal>
+    <div class="modal-header bg-danger">
+        <h4 class="modal-title text-white" id="myModalLabel">Add Agency</h4>
+        <button type="button" [disabled]="delUser" class="close" (click)="closeded(modal)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        
+        <!-- Agency -->
+        <div>
+            <form class="user" [formGroup]="formData" (ngSubmit)="submitted(modal)">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="common-form-field">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="welcome-logo">
+                                        <img src="assets/images/log.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="welcome">
+                                        <h1>Agency Information</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">Agency Name *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['agency_name'].dirty && controls['agency_name'].invalid"
+                                            formControlName="agency_name"
+                                            class="form-control form-control-user" id="agency_name"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['agency_name'].dirty && controls['agency_name'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_name'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Agency Phone No *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text" phoneMask [preValue]="formData.value.agency_phone" maxlength="14"
+                                            [class.is-invalid]="controls['agency_phone'].dirty && controls['agency_phone'].invalid"
+                                            formControlName="agency_phone" class="form-control form-control-user"
+                                            id="agency_phone">
+                                        <span
+                                            *ngIf="controls['agency_phone'].dirty && controls['agency_phone'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_phone'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_phone'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Enter valid number
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Agency Email Address</label>
+                                    </div>
+                                </div>    
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="email"
+                                            [class.is-invalid]="controls['agency_email'].dirty && controls['agency_email'].invalid"
+                                            formControlName="agency_email"
+                                            class="form-control form-control-user" id="agency_email">
+                                        <span
+                                            *ngIf="controls['agency_email'].dirty && controls['agency_email'].invalid">
+                                            <!-- <div class="invalid-feedback"
+                                                *ngIf="controls['agency_email'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div> -->
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_email'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Please enter valid email
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">Agency Address *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['address1'].dirty && controls['address1'].invalid"
+                                            formControlName="address1"
+                                            class="form-control form-control-user" id="address1"
+                                             class="form-control" placeholder="Address 1"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['address1'].dirty && controls['address1'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['address1'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['address2'].dirty && controls['address2'].invalid"
+                                            formControlName="address2"
+                                            class="form-control form-control-user" id="address2"
+                                             class="form-control" placeholder="Address 2"
+                                            aria-describedby="passwordHelpInline">
+                                        <!-- <span
+                                            *ngIf="controls['address2'].dirty && controls['address2'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['address2'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">
+                                           Agency City *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['city'].dirty && controls['city'].invalid"
+                                            formControlName="city"
+                                            class="form-control form-control-user" id="city"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['city'].dirty && controls['city'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['city'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">
+                                           Agency State *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <select id="inputState" class="form-control"  formControlName="state">
+                                          <option value="" selected disabled  >State...</option>
+                                          <option value="NY">NY</option>
+                                                <option value="WDC">WDC</option>
+                                                <option value="KL">KL</option>
+                                                <option value="VA">VA</option>
+                                        </select>
+                                        <span *ngIf="controls['state'].dirty && controls['state'].invalid">
+                                          <div class="invalid-feedback"
+                                            *ngIf="controls['state'].hasError('required')" class="text text-danger">
+                                            This field required
+                                          </div>
+                                        </span>
+                                        </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">
+                                           Agency Zip Code *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['zipcode'].dirty && controls['zipcode'].invalid"
+                                            formControlName="zipcode"
+                                            class="form-control form-control-user" id="zipcode"
+                                             class="form-control" maxlength="5"
+                                            aria-describedby="passwordHelpInline" inputDirective inptype="number" >
+                                        <span
+                                            *ngIf="controls['zipcode'].dirty && controls['zipcode'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['zipcode'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">
+                                           Agency Website *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['agency_website'].dirty && controls['agency_website'].invalid"
+                                            formControlName="agency_website"
+                                            class="form-control form-control-user" id="agency_website"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['agency_website'].dirty && controls['agency_website'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_website'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">
+                                            Primary Contact Person</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['primary_contact_person'].dirty && controls['primary_contact_person'].invalid"
+                                            formControlName="primary_contact_person"
+                                            class="form-control form-control-user" id="primary_contact_person"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['primary_contact_person'].dirty && controls['primary_contact_person'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['primary_contact_person'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div> -->
+                            
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">
+                                            Agency Contact First Name *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['agency_contact_firstname'].dirty && controls['agency_contact_firstname'].invalid"
+                                            formControlName="agency_contact_firstname"
+                                            class="form-control form-control-user" id="agency_contact_firstname"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['agency_contact_firstname'].dirty && controls['agency_contact_firstname'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_firstname'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">
+                                            Agency Contact Last Name *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['agency_contact_lastname'].dirty && controls['agency_contact_lastname'].invalid"
+                                            formControlName="agency_contact_lastname"
+                                            class="form-control form-control-user" id="agency_contact_lastname"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['agency_contact_lastname'].dirty && controls['agency_contact_lastname'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_lastname'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label  class="col-form-label">
+                                            Agency Contact Person Title *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text"
+                                            [class.is-invalid]="controls['agency_contact_person_title'].dirty && controls['agency_contact_person_title'].invalid"
+                                            formControlName="agency_contact_person_title"
+                                            class="form-control form-control-user" id="agency_contact_person_title"
+                                             class="form-control"
+                                            aria-describedby="passwordHelpInline">
+                                        <span
+                                            *ngIf="controls['agency_contact_person_title'].dirty && controls['agency_contact_person_title'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_person_title'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Agency Contact Cell Number *</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text" phoneMask [preValue]="formData.value.agency_contact_cell_number" maxlength="14"
+                                            [class.is-invalid]="controls['agency_contact_cell_number'].dirty && controls['agency_contact_cell_number'].invalid"
+                                            formControlName="agency_contact_cell_number" class="form-control form-control-user"
+                                            id="agency_contact_cell_number">
+                                        <span
+                                            *ngIf="controls['agency_contact_cell_number'].dirty && controls['agency_contact_cell_number'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_cell_number'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_cell_number'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Enter valid number
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Agency Contact Email Address *</label>
+                                    </div>
+                                </div>    
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="email"
+                                            [class.is-invalid]="controls['agency_contact_email_address'].dirty && controls['agency_contact_email_address'].invalid"
+                                            formControlName="agency_contact_email_address"
+                                            class="form-control form-control-user" id="agency_contact_email_address">
+                                        <span
+                                            *ngIf="controls['agency_contact_email_address'].dirty && controls['agency_contact_email_address'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_email_address'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['agency_contact_email_address'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Please enter valid email
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Primary Contact Phone</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="text" phoneMask [preValue]="formData.value.primary_contact_phone" maxlength="14"
+                                            [class.is-invalid]="controls['primary_contact_phone'].dirty && controls['primary_contact_phone'].invalid"
+                                            formControlName="primary_contact_phone" class="form-control form-control-user"
+                                            id="primary_contact_phone">
+                                        <span
+                                            *ngIf="controls['primary_contact_phone'].dirty && controls['primary_contact_phone'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['primary_contact_phone'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['primary_contact_phone'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Enter valid number
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Primary Contact Email</label>
+                                    </div>
+                                </div>    
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="email"
+                                            [class.is-invalid]="controls['primary_contact_email'].dirty && controls['primary_contact_email'].invalid"
+                                            formControlName="primary_contact_email"
+                                            class="form-control form-control-user" id="primary_contact_email">
+                                        <span
+                                            *ngIf="controls['primary_contact_email'].dirty && controls['primary_contact_email'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['primary_contact_email'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['primary_contact_email'].hasError('pattern')"
+                                                class="text text-danger">
+                                                Please enter valid email
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- <div class="row" *ngIf="currentUser?.role == 'Admin'">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">
+                                            Community </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">                                        
+                                        <select
+                                        placeholder="community_id"
+                                        formControlName="community_id"
+                                        id="community_id"
+                                        type="select"
+                                        class="form-control">
+                                        <option value="disabled">Select Community Id</option>
+                                        <option *ngFor="let communite of allCommunity" [value]="communite.id">
+                                          {{communite?.community_name}}
+                                        </option>
+                                        </select>
+                                        <span
+                                            *ngIf="controls['community_id'].dirty && controls['community_id'].invalid">
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['community_id'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div> -->
+                           
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="password"
+                                            [class.is-invalid]="controls['password'].dirty && controls['password'].invalid"
+                                            formControlName="password" class="form-control form-control-user"
+                                            id="password">
+                                        <span
+                                            *ngIf="controls['password'].dirty && controls['password'].invalid">
+                                            <!-- <div class="invalid-feedback"
+                                                *ngIf="controls['password'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div> -->
+                                            <div class="invalid-feedback"
+                                                *ngIf="controls['password'].hasError('pattern')"
+                                                class="text text-danger">
+                                                A minimum 8 characters password contains a combination of
+                                                uppercase and lowercase letter and special character are
+                                                required.
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="common-form-left">
+                                        <label for="inputPassword6" class="col-form-label">Confirm Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="common-form-left form-group">
+                                        <input type="password"
+                                            [class.is-invalid]="controls['cnfrmpassword'].dirty && controls['cnfrmpassword'].invalid"
+                                            formControlName="cnfrmpassword" class="form-control form-control-user"
+                                            id="cnfrmpassword">
+                                        <span
+                                            *ngIf="controls['cnfrmpassword'].dirty && controls['cnfrmpassword'].invalid">
+                                            <!-- <div class="invalid-feedback"
+                                                *ngIf="controls['cnfrmpassword'].hasError('required')"
+                                                class="text text-danger">
+                                                This field required
+                                            </div> -->
+                                            
+                                            <div *ngIf="controls.cnfrmpassword.errors.confirmedValidator" style="color: #ea5455; font-size: 1rem;">Password and Confirm Password must be match.</div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" [disabled]="btnShow">
+                                Add
+                                <span *ngIf="btnShow" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" [disabled]="delUser" class="btn btn-danger d-flex float-right"
+            style="margin-top: 10px!important;" (click)="closeAddCommunity(modal)" rippleEffect>
+            <span *ngIf="delUser" class="spinner-border spinner-border-sm mr-1"></span>Cancel
+        </button>
+    </div> -->
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,541 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- content-header component -->
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+        <!-- account setting page -->
+        <section id="page-account-settings">
+            <div class="row nav-vertical d-flex">
+                <div class="col-md-12 mb-2 mb-md-0">
+                    <ul ngbNav #navVertical="ngbNav" class="nav nav-pills flex-column nav-left">
+
+                        <li class="nav-item" ngbNavItem>
+                            <!-- <a ngbNavLink class="nav-link d-flex py-75" id="account-pill-general" data-toggle="pill"
+                  href="#account-vertical-general" aria-expanded="true">
+                  <i data-feather="user" class="font-medium-3 mr-1"></i>
+                  <span class="font-weight-bold">Basic Info</span>
+                </a> -->
+
+                            <div class="card">
+                                <div class=" row justify-content-between">
+                                    <div class="card-header ml-1">
+                                        <h4 class="card-title">Edit Shift</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mt-3">
+                                        <form class="user">
+                                            <div class="row" hidden>
+                                                <div class="col-lg-4">
+                                                    <div class="common-form-left">
+                                                        <label for="inputPassword6" class="col-form-label">
+                                                            hidden </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="common-form-left form-group ">
+                        
+                                                        <input type="text" value="Communication for Confirmation"
+                                                            placeholder="Communication for Confirmation" disabled name="shift"
+                                                            [(ngModel)]="shiftCommunication">
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="common-form-left">
+                                                        <label for="inputPassword6" class="col-form-label">
+                                                            Shift Type</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="common-form-left form-group d-flex">
+                        
+                                                        <!-- <select placeholder="title" [(ngModel)]="project_id" name="Shift{{i}}" 
+                                                                id="project_id" type="select" class="form-control">
+                                                                <option disabled value="">Select type</option>
+                                                                <option value="Urgent">
+                                                                    Urgent
+                                                                </option>
+                                                                <option value="Standard">
+                                                                    Standard
+                                                                </option>
+                                                            </select> -->
+                        
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" name='is_urgent' value='urgent'
+                                                                [(ngModel)]="is_urgent" type="radio" id="flexRadioDefault1">
+                                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                                Urgent
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check ml-3">
+                                                            <input class="form-check-input" name='is_urgent' value='standard'
+                                                                [(ngModel)]="is_urgent" type="radio" id="flexRadioDefault2" checked>
+                                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                                Standard
+                                                            </label>
+                                                        </div>
+                                                        <!-- <span
+                                                            *ngIf="controls['project_id'].dirty && controls['project_id'].invalid">
+                                                            <div class="invalid-feedback"
+                                                                *ngIf="controls['project_id'].hasError('required')"
+                                                                class="text text-danger">
+                                                                This field required
+                                                            </div>
+                                                        </span> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="common-form-field">
+                        
+                                                        <!-- <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6" class="col-form-label">Employee Type
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group d-flex">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" name='for_cp' value='0'
+                                                                            [(ngModel)]="for_cp" type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault1">
+                                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                                            Community
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check ml-3">
+                                                                        <input class="form-check-input" name='for_cp' value='1'
+                                                                            [(ngModel)]="for_cp" type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault2" checked>
+                                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                                            Both
+                                                                        </label>
+                                                                    </div>
+                                                                    <span
+                                                                        *ngIf="controls['community_id'].dirty && controls['community_id'].invalid">
+                                                                        <div class="invalid-feedback"
+                                                                            *ngIf="controls['community_id'].hasError('required')"
+                                                                            class="text text-danger">
+                                                                            This field required
+                                                                        </div>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Team member type *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group d-flex">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" name='for_cp'
+                                                                            value='0' [(ngModel)]="for_cp"
+                                                                            type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault1">
+                                                                        <label class="form-check-label"
+                                                                            for="flexRadioDefault1">
+                                                                            Team members
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check ml-3">
+                                                                        <input class="form-check-input" name='for_cp'
+                                                                            value='2' [(ngModel)]="for_cp"
+                                                                            type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault2" checked>
+                                                                        <label class="form-check-label"
+                                                                            for="flexRadioDefault2">
+                                                                            Contract agencies
+                                                                        </label>
+                                                                    </div>
+                        
+                                                                    <div class="form-check ml-3">
+                                                                        <input class="form-check-input" name='for_cp'
+                                                                            value='1' [(ngModel)]="for_cp"
+                                                                            type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault2" checked>
+                                                                        <label class="form-check-label"
+                                                                            for="flexRadioDefault2">
+                                                                            Both Team Members And Contract Agencies
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- <div class="form-check ml-3">
+                                                                        <input class="form-check-input" name='for_cp'
+                                                                            value='3' [(ngModel)]="for_cp"
+                                                                            type="radio" name="flexRadioDefault"
+                                                                            id="flexRadioDefault2" checked>
+                                                                        <label class="form-check-label"
+                                                                            for="flexRadioDefault2">
+                                                                            Other agencies
+                                                                        </label>
+                                                                    </div> -->
+                                                                </div>
+                                                                <div *ngIf="submit && for_cp">
+                                                                    <div [ngClass]="{'is-invalid': true}"
+                                                                        style="color: red;">This field is Required</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Department *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <!-- <ng-multiselect-dropdown placeholder="--Department List--"
+                                                                    [settings]="dropdownSettings" name="department"
+                                                                    [data]="departmentVal"
+                                                                    [(ngModel)]="department" (keyUp.enter)="search()" 
+                                                                    >
+                                                                </ng-multiselect-dropdown> -->
+                                                                <select 
+                                                                [(ngModel)]="department" name="department"
+                                                                class="form-control">
+                                                                <option value="undefined" selected="selected" disabled>---Departments List---</option>
+                                                                <option value="Activities">Activities</option>
+                                                                <option value="Business Office">Business Office                                                                </option>
+                                                                <option value="Dining">Dining                                                                </option>
+                                                                <option value="Environmental Services">Environmental Services                                                                </option>
+                                                                <option value="Health & Wellness">Health & Wellness                                                                </option>
+                                                                <option value="Housekeeping">Housekeeping</option>
+                                                                <option value="Laundry">Laundry</option>
+                                                            </select>
+                                                                </div>
+                                                                <div *ngIf="submit && department">
+                                                                    <div [ngClass]="{'is-invalid': true}"
+                                                                        style="color: red;">This field is Required</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Position *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <!-- <ng-multiselect-dropdown placeholder="--Positions List--"
+                                                                    [settings]="dropdownSettings1" name="position"
+                                                                    [data]="positionVal"
+                                                                    [(ngModel)]="position" (keyUp.enter)="search()">
+                                                                    </ng-multiselect-dropdown> -->
+                                                                        <select 
+                                                                        [(ngModel)]="position" name="position"
+                                                                        class="form-control">
+                                                                        <option value="" selected="selected" disabled>---Positions List---</option>
+                                                                        <option value="Concierge">Concierge</option>
+                                                                        <option value="Cook">Cook</option>
+                                                                        <option value="Dining Concierge">Dining Concierge</option>
+                                                                        <option value="Direct Care Aide">Direct Care Aide</option>
+                                                                        <option value="Dishwasher/Dining Aide">Dishwasher/Dining Aide</option>
+                                                                        <option value="Housekeeper">Housekeeper</option>
+                                                                        <option value="Laundry Aide">Laundry Aide</option>
+                                                                        <option value="Maintenance Assistant">Maintenance Assistant</option>
+                                                                        <option value="Registered Medication Aide/AMAP">Registered Medication Aide/AMAP</option>
+                                                                        <option value="Shift Supervisor">Shift Supervisor</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div *ngIf="submit && position">
+                                                                    <div [ngClass]="{'is-invalid': true}"
+                                                                        style="color: red;">This field is Required</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Certification Required *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <!-- <ng-multiselect-dropdown placeholder="--Certifications List--"
+                                                                    [settings]="dropdownSettings2" name="certification"
+                                                                    [data]="certificationVal"
+                                                                    [(ngModel)]="certification" (keyUp.enter)="search()">
+                                                                    </ng-multiselect-dropdown> -->
+                                                                        <select 
+                                                                        [(ngModel)]="certification" name="crtfReq"
+                                                                        class="form-control">
+                                                                        <option value="undefined" selected="selected" disabled>---Certification Required List---</option>
+                                                                        <option value="Direct Care Aide">Direct Care Aide</option>
+                                                                        <option value="Licensed Practical Nurse">Licensed Practical Nurse</option>
+                                                                        <option value="Registered Medication Aide">Registered Medication Aide</option>
+                                                                        <option value="Registered Nurse">Registered Nurse</option>
+                                                                        <option value="Serve Safe Certified">Serve Safe Certified</option>
+                                                                        <option value="Not Applicable">Not Applicable</option>
+                                                                        
+                                                                    </select>
+                                                                   
+                                                                </div>
+                                                                <div *ngIf="submit && position">
+                                                                    <div [ngClass]="{'is-invalid': true}"
+                                                                        style="color: red;">This field is Required</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row" *ngIf="currentUser.role == 'SuperAdmin' || currentUser.role == 'Admin'">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Community List *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <!-- <ng-multiselect-dropdown placeholder="--Select Community--"
+                                                                            [settings]="dropdownSettings3" name="community"
+                                                                            [data]="currentUser.role =='Admin' ? mngmCommunity : allCommunity"
+                                                                            [(ngModel)]="community" (keyUp.enter)="search()">
+                                                                        </ng-multiselect-dropdown> -->
+                                                                        <select *ngIf="currentUser.role == 'Admin'"
+                                                                            [(ngModel)]="community" name="title"
+                                                                            class="form-control">
+                                                                            <option  selected="selected" disabled>----Community List----</option>
+                                                                            <option [ngValue]="tm.id" *ngFor="let tm of mngmCommunity">
+                                                                                {{tm.community_name}}</option>
+                                                                        </select>
+                        
+                                                                        <select *ngIf="currentUser.role == 'SuperAdmin'"
+                                                                            [(ngModel)]="community" name="title"
+                                                                            class="form-control">
+                                                                            <option  selected="selected" disabled>----Community List----</option>
+                                                                            <option [ngValue]="tm.id" *ngFor="let tm of allCommunity">
+                                                                                {{tm.community_name}}</option>
+                                                                        </select>
+                                                                </div>
+                                                             </div>
+                                                        </div>
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6" class="col-form-label">Delay
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="d-flex common-form-left form-group">
+                                                                    <div class="input-group ">
+                                                                        <select placeholder="HH" *ngIf="h_m == 'Hours'"
+                                                                            [(ngModel)]="delay" name="delay" class="form-control">
+                                                                            <!-- <option  disabled>Hours</option> -->
+                                                                            <option  disabled>No Delay</option>
+                                                                            <option *ngFor="let tm of Hours" [value]="tm.hour">
+                                                                                {{tm.hour}}</option>
+                                                                                
+                                                                        </select>
+                        
+                                                                        <select placeholder="HH" *ngIf="h_m == 'Minutes'"
+                                                                            [(ngModel)]="delay" name="delay" class="form-control">
+                                                                            <!-- <option disabled>Minutes</option> -->
+                                                                            <option disabled>No Delay</option>
+                                                                            <option *ngFor="let tm of Minutes">
+                                                                                {{tm.minute}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="input-group ml-1">
+                                                                        <select placeholder="MM" [(ngModel)]="h_m" name="h_m"
+                                                                            class="form-control">
+                                                                            <option value="Hours" selected>Hours</option>
+                                                                            <option value="Minutes"> Minutes</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <!-- <input type="text"  [(ngModel)]="delay" 
+                                                                name="delay{{i}}"
+                                                                class="form-control form-control-user" id="budget"> -->
+                                                                    <!-- [class.is-invalid]="controls['budget'].dirty && controls['budget'].invalid" -->
+                                                                    <!-- <span
+                                                                    *ngIf="controls['budget'].dirty && controls['budget'].invalid">
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="controls['budget'].hasError('required')"
+                                                                        class="text text-danger">
+                                                                        This field required
+                                                                    </div>
+                                                                </span> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6" class="col-form-label">Description
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <textarea [(ngModel)]="description" name="des"
+                                                                        class="form-control form-control-user" id="description"></textarea>
+                                                                    <!-- [class.is-invalid]="controls['estimate'].dirty && controls['estimate'].invalid" -->
+                                                                    <!-- <span
+                                                                        *ngIf="controls['estimate'].dirty && controls['estimate'].invalid">
+                                                                        <div class="invalid-feedback"
+                                                                            *ngIf="controls['estimate'].hasError('required')"
+                                                                            class="text text-danger">
+                                                                            This field required
+                                                                        </div>
+                        
+                                                                    </span> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row mb-1">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Shift Start *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group col-lg-8 mb-1">
+                                                                <input type="date" min="{{todaysDate}}"
+                                                                    class="form-control"
+                                                                    [(ngModel)]="start_time" name="start_time"
+                                                                    aria-label="Text input with dropdown button">
+                        
+                                                                <select placeholder="HH:MM" [(ngModel)]="startTime"
+                                                                    name="startTime" class="form-control" >
+                                                                    <option disabled value="undefined">HH:MM</option>
+                                                                    <option *ngFor="let tm of timeslots">
+                                                                        {{tm.label}}</option>
+                                                                </select>
+                                                                <div class="erro-class"
+                                                                    *ngIf="submit && startTime">Start Date and Time
+                                                                    is Required</div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6"
+                                                                        class="col-form-label">Shift End *
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group col-lg-8 mb-1">
+                                                                <input type="date" min="{{start_time}}"
+                                                                    [(ngModel)]="end_time" name="end_time"
+                                                                    class="form-control"
+                                                                    aria-label="Text input with dropdown button">
+                        
+                                                                <!-- <div ngbDropdown >
+                                                                        <button type="button" class=" form-control " id="dropdownBasic1" ngbDropdownToggle>Time</button>
+                                                                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" >
+                                                                         <button  class=" form-control btn-sm " ngbDropdownItem>10:00 Am</button>
+                                                                         <button class="form-control btn-sm "  ngbDropdownItem>10:30 Am</button>
+                                                                     <button class="form-control btn-sm "  ngbDropdownItem>11:00 Am</button>
+                                                                    </div>
+                                                                    </div> -->
+                        
+                                                                <select placeholder="HH:MM" [(ngModel)]="endTime"
+                                                                    name="endTime" class="form-control"> 
+                                                                    <option disabled value="undefined">HH:MM</option>
+                                                                    <option *ngFor="let tm of timeslots">
+                                                                        {{tm.label}}</option>
+                                                                </select>
+                                                                <div class="erro-class" *ngIf="submit && endTime">
+                                                                    End Date and Time is Required</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6" class="col-form-label">Who Posted This Shift
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <input [(ngModel)]="community_name" name="community_name" readonly
+                                                                        class="form-control form-control-user" id="community_name">
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="common-form-left">
+                                                                    <label for="inputPassword6" class="col-form-label">Shift Posted At
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-8">
+                                                                <div class="common-form-left form-group">
+                                                                    <input [(ngModel)]="created_at" name="created_at" readonly
+                                                                        class="form-control form-control-user" id="created_at">
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        
+                                                        <div class="row addUserbtn">
+                                                            <div class="m-1">
+                                                                <button type="button" (click)="addForm()" class="btn btn-primary"
+                                                                    [disabled]="btnShow">
+                                                                    <span *ngIf="btnShow" class="spinner-border spinner-border-sm" role="status"
+                                                                        aria-hidden="true"></span>
+                                                                    Edit
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <button type="button" (click)="addForm()" class="btn btn-primary" [disabled]="btnShow">
+                                Add Another Shift
+                                <span *ngIf="btnShow" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+
+                            <button type="button" (click)="submitted()" class="btn btn-primary ml-1"
+                                [disabled]="btnShow">
+                                Submit
+                                <span *ngIf="btnShow" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button> -->
+                        </li>
+                    </ul>
+                </div>
+                <div [ngbNavOutlet]="navVertical" class="col-12 col-md-9"></div>
+            </div>
+        </section>
+        <!--/ account setting page -->
+    </div>
+</div>
+
+

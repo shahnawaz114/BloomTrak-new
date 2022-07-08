@@ -1,0 +1,257 @@
+<div class="row match-height">
+    <!-- Medal Card -->
+    <ng-container *ngFor="let dashuser of dashusers">
+    <div class="col-xl-4 col-md-6 col-12" *ngIf="dashuser.roles.includes(currentUser.role)">
+        <div class="card card-congratulation-medal">
+            <div class="card-body">
+                <h5>Wlecome 🎉 {{ dashuser?.username }}!</h5>
+                <p class="card-text font-small-3">to bloomtrak</p>
+                <h3 class="mb-75 mt-2 pt-50">
+                    <a href="javascript:void(0);">Tot. {{dashuser?.name}} {{dashuser?.total_username || 0}}</a>
+                </h3>
+                <button type="button" class="btn btn-primary" routerLink="{{rLink}}">
+                    <i class="fa fa-eye"></i>
+                    {{viewStat}}
+                </button>
+                <img src="assets/images/illustration/badge.svg" class="congratulation-medal" alt="Medal Pic" />
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<!-- <div class="col-xl-4 col-md-6 col-12">
+    <div class="card card-congratulation-medal">
+        <div class="card-body">
+            <h5>Wlecome 🎉 {{ currentUser?.username }}!</h5>
+            <p class="card-text font-small-3">to bloomtrak</p>
+            <h3 class="mb-75 mt-2 pt-50">
+                <a href="javascript:void(0);">Tot. Communities {{data?.total_user || 0}}</a>
+            </h3>
+            <button type="button" class="btn btn-primary" rippleEffect>View Communities</button>
+            <img src="assets/images/illustration/badge.svg" class="congratulation-medal" alt="Medal Pic" />
+        </div>
+    </div>
+</div> -->
+    <!--/ Medal Card -->
+    <!-- Statistics Card -->
+    <div class="col-xl-8 col-md-6 col-12">
+        <div class="card card-statistics">
+            <div class="card-header">
+                <h4 class="card-title">Statistics</h4>
+                <div class="d-flex align-items-center">
+                    <p class="card-text font-small-2 mr-25 mb-0">For bloomtrak</p>
+                </div>
+            </div>
+            <div class="card-body statistics-body">
+                <div class="row">
+                    <ng-container *ngFor="let dispStat of stats">
+
+                    <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0" *ngIf="dispStat.roles.includes(currentUser.role)">
+                        <div class="media">
+                            <div class="avatar {{dispStat.iconColor}} mr-2">
+                                <div class="avatar-content">
+                                    <i class="{{dispStat.icon}} avatar-icon"></i>
+                                </div>
+                            </div>
+                            <div class="media-body my-auto">
+                                <h4 class="font-weight-bolder mb-0">{{ dispStat.stat || 0 }}</h4>
+                                <p class="card-text font-small-3 mb-0">{{dispStat.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                   </ng-container>
+
+                    <!-- <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+                        <div class="media">
+                            <div class="avatar bg-light-info mr-2">
+                                <div class="avatar-content">
+                                    <i class="fa fa-building-o  avatar-icon"></i>
+                                </div>
+                            </div>
+                            <div class="media-body my-auto">
+                                <h4 class="font-weight-bolder mb-0">{{ data?.total_vehicle || 0 }}</h4>
+                                <p class="card-text font-small-3 mb-0">Agencies</p>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-sm-6 col-xl-3 mb-2 mb-sm-0">
+                        <div class="media">
+                            <div class="avatar bg-light-danger mr-2">
+                                <div class="avatar-content">
+                                    <i class="fa fa-car avatar-icon"></i>
+                                </div>
+                            </div>
+                            <div class="media-body my-auto">
+                                <h4 class="font-weight-bolder mb-0">{{ data?.active_booking || 0}}</h4>
+                                <p class="card-text font-small-3 mb-0">Employees</p>
+                            </div>
+                        </div>
+                    </div> -->
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Statistics Card -->
+    <!-- Todays -->
+    <!-- <div class="col-xl-8 col-md-6 col-12">
+        <div class="card card-statistics">
+            <div class="card-header">
+                <h4 class="card-title">Today's</h4>
+            </div>
+            <div class="card-body">
+
+                <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                    <li ngbNavItem>
+                        <a ngbNavLink>Reservations</a>
+                        <ng-template ngbNavContent>
+                            <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="todayBooking"
+                                [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" rowHeight="auto">
+                                <ngx-datatable-column [name]="'Departure Time'" prop="start_period">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                    
+                                        {{ row.start_period | date : 'MMM dd yyyy'}}, {{ '1/1/2021 '+row.start_time |
+                                        date : 'h:mm a'}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'Vehicle'" prop="name">
+                                    <ng-template let-vehicle_row="row" ngx-datatable-cell-template>
+                                        {{vehicle_row.name}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'user.usrName' | translate" prop="username">
+                                </ngx-datatable-column>
+
+                            </ngx-datatable>
+                        </ng-template>
+                    </li>
+                    <li ngbNavItem>
+                        <a ngbNavLink>Departures</a>
+                        <ng-template ngbNavContent>
+                            <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="todays_Departure"
+                                [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
+                                [limit]="10">
+                                <ngx-datatable-column [name]="'Departure Time'" prop="end_period">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                     
+                                        {{ row.start_period | date : 'MMM dd yyyy'}}, {{ '1/1/2021 '+row.start_time |
+                                        date : 'h:mm a'}}
+
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'Vehicle'" prop="name">
+                                    <ng-template let-vehicle_row="row" ngx-datatable-cell-template>
+                                        {{vehicle_row.name}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'user.usrName' | translate" prop="username">
+                                </ngx-datatable-column>
+
+                            </ngx-datatable>
+                        </ng-template>
+                    </li>
+                    <li ngbNavItem>
+                        <a ngbNavLink>Returning</a>
+                        <ng-template ngbNavContent>
+                            <ngx-datatable #tablesss class="bootstrap core-bootstrap sz-1000" [rows]="todays_Returning"
+                                [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
+                                [limit]="10">
+                                <ngx-datatable-column [name]="'Arrival Time'" prop="end_period">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                     
+                                        {{ row.end_period | date : 'MMM dd yyyy'}}, {{ '1/1/2021 '+row.end_time | date :
+                                        'h:mm a'}}
+
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'Vehicle'" prop="name">
+                                    <ng-template let-vehicle_row="row" ngx-datatable-cell-template>
+                                        {{vehicle_row.name}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [name]="'user.usrName' | translate" prop="username">
+                                </ngx-datatable-column>
+
+                            </ngx-datatable>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+            </div>
+        </div>
+
+    </div> -->
+    <!-- Memo -->
+    <!-- <div class="col-xl-4 col-md-6 col-12">
+        <div class="card card-statistics">
+            <div class="card-header">
+                <h4 class="card-title">Memo</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+        
+                    <textarea class="form-control" id="account-memo" name="account-memo" [(ngModel)]="memoText" row="5"
+                        placeholder="Enter Memo"> </textarea>
+                </div>
+                <div class="form-group text-right">
+                    <button class="btn btn-primary" (click)="updateMemo()" [disabled]="loadingMemo">
+                        Update Memo <span *ngIf="loadingMemo" class="spinner-border spinner-border-sm mr-1"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div> -->
+
+    <!-- <div class="col-xl-8 col-md-6 col-12">
+        <div class="card card-statistics">
+            <div class="card-header">
+                <h4 class="card-title">Availability</h4>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<!----------Shift Started Card---------->
+<!-- <div class="row match-height" *ngIf="currentUser.role == 'User'"> -->
+    <!-- Shift Card -->
+    <!-- <ng-container>
+        <div class="col-xl-4 col-md-6 col-12">
+            <div class="card card-congratulation-medal">
+                <div class="card-body">
+                    <h5>Started Shift</h5>
+                </div>
+        </div>
+        </div>
+    </ng-container> -->
+    <!--/ Shift Card -->
+<!-- </div> -->
+<!-- 
+<ng-template #reserveDateModal let-modal14>
+    <div class="modal-header bg-primary">
+        <h4 class="modal-title text-white" id="myModalLabel1">{{unReserveDt? 'Remove' :'Add'}} Holiday</h4>
+        <button type="button" [disabled]="reservingDate" class="close" (click)="closed(modal14)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <h5>Are you sure you want to {{unReserveDt? 'remove' :'Add'}} this date as holiday?</h5>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="reservingDate" (click)="reserveDate(modal14)"
+            class="btn btn-info d-flex float-right" style="margin-top: 10px!important;" rippleEffect>
+            <span *ngIf="reservingDate" class="spinner-border spinner-border-sm mr-1"></span> Yes
+        </button>
+    </div>
+</ng-template> -->
